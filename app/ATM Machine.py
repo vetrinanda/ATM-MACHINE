@@ -104,6 +104,22 @@ class Account:
         else:
             # speak("Account number or phone number is incorrect.")
             print("Account number or phone number is incorrect.")
+            
+    def delete_account(self):
+        account = int(input("Enter your account number: "))
+        pin = int(input("Enter your PIN: "))
+            
+        if account in self.info and self.info[account]["pin"] == pin:
+            if self.info[account]["balance"] != 0:
+                    # speak("Please withdraw all the money before deleting the account.")
+                    print("Please withdraw all the money before deleting the account.")
+            else:
+                del self.info[account]
+                    # speak("Your account has been deleted successfully.")
+                print("Your account has been deleted successfully.")
+        else:
+                # speak("Account number or PIN is incorrect.")
+            print("Account number or PIN is incorrect.")
         
 
 # Main Menu Loop
@@ -111,7 +127,7 @@ class Account:
 print("----------Welcome to Harshad Mehta Banks------------")
 while True:    
     ac = Account()
-    print("1. Create Account \n2. Deposit Money \n3. Withdraw Money \n4. Check Balance \n5. Change PIN \n6. Exit")
+    print("1. Create Account \n2. Deposit Money \n3. Withdraw Money \n4. Check Balance \n5. Change PIN \n 6.Delete Account \n7. Exit")
     choice = int(input("Enter Your Choice: "))
 
     if choice == 1:
@@ -125,6 +141,8 @@ while True:
     elif choice == 5:
         ac.change_pin()
     elif choice == 6:
+        ac.delete_account()
+    elif choice == 7:
         #speak("Thank You For Using Harshad Mehta Bank Visit Again")
         print("Thanks for Using the Bank")
         break
