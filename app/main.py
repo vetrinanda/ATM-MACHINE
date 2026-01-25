@@ -25,7 +25,9 @@ def get_db():
 # db: Session = Depends(get_db)
 
 
-app=FastAPI()
+app=FastAPI(title="Welcome to Harshad Mehta Banks",
+    description="API for banking operations",
+    version="1.0.0")
 
 @app.get("/")
 def read_root():
@@ -57,7 +59,7 @@ def create_account(bank:AccountCreate, db: Session = Depends(get_db)):
     db.refresh(new_account)
     
     return {
-        "message": "Account created successfully",
+        "message": "Account created successfully.Thank you for choosing Harshad Mehta Banks. Please keep your Account Number and PIN safe.",
         "account_details": {
             "Name": bank.Name,
             "Phone Number": bank.phone,
@@ -96,8 +98,9 @@ def money_withdraw(amount:int,pin:int,db: Session = Depends(get_db)):
 
 
 @app.put("/change_pin/")
-def change_pin(account_id: int, new_pin: int, db: Session = Depends(get_db)):
-    account = db.query(BankAccount).filter(BankAccount.account_id == account_id).first()
+def change_pin(account_id: int, phone: int, new_pin: int, db: Session = Depends(get_db)):
+    account = db.query(BankAccount).filter(BankAccount.account_id == account_id and BankAccount.phone == phone).first()
+    # account = db.query(BankAccount).filter(BankAccount.phone == phone).first()
     if not account:
         raise HTTPException(status_code=404, detail="Account not found Create a Bank Account.")
 
@@ -110,9 +113,10 @@ def change_pin(account_id: int, new_pin: int, db: Session = Depends(get_db)):
 
 @app.delete("/delete_account/")
 def delete_account(account_id: int,pin:int, db: Session = Depends(get_db)):
-    account = db.query(BankAccount).filter(BankAccount.account_id == account_id).first()
-    account = db.query(BankAccount).filter(BankAccount.pin == pin).first()
-    
+    account = db.query(BankAccount).filter(BankAccount.account_id == account_id and BankAccount.pin == pin).first()
+
+    if account.balance != 0:
+        raise HTTPException(status_code=400, detail="Please withdraw all the money before deleting the account.")
     if not account:
         raise HTTPException(status_code=404, detail="Account not found Create a Bank Account.")
 
