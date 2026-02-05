@@ -123,4 +123,4 @@ def delete_account(account_id: int,pin:int, db: Session = Depends(get_db)):
     db.delete(account)
     db.commit()
 
-    return {"message": "Account deleted successfully"}
+    return {"message": "Account deleted successfully Thank you for choosing Harshad Mehta Banks. We hope to see you again."}
